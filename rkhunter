@@ -1,0 +1,2 @@
+yum install rkhunter
+rkhunter --check
