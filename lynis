@@ -3,3 +3,28 @@ https://packages.cisofy.com/
 git clone https://github.com/CISOfy/lynis
 
  ./lynis audit system -Q
+
+
+ How to perform a remote scan:
+  =============================
+  Target  : www.production.com
+  Command : ./lynis audit system --quick www.production.com
+
+  * Step 1: Create tarball
+    mkdir -p ./files && cd .. && tar czf ./lynis/files/lynis-remote.tar.gz --exclude=files/lynis-remote.tar.gz ./lynis && cd lynis
+
+  * Step 2: Copy tarball to target www.production.com
+    scp -q ./files/lynis-remote.tar.gz www.production.com:~/tmp-lynis-remote.tgz
+
+  * Step 3: Execute audit command
+    ssh www.production.com "mkdir -p ~/tmp-lynis && cd ~/tmp-lynis && tar xzf ../tmp-lynis-remote.tgz && rm ../tmp-lynis-remote.tgz && cd lynis && ./lynis audit system --quick www.production.com"
+
+  * Step 4: Clean up directory
+    ssh www.production.com "rm -rf ~/tmp-lynis"
+
+  * Step 5: Retrieve log and report
+    scp -q www.production.com:/tmp/lynis.log ./files/www.production.com-lynis.log
+    scp -q www.production.com:/tmp/lynis-report.dat ./files/www.production.com-lynis-report.dat
+
+  * Step 6: Clean up tmp files (when using non-privileged account)
+    ssh www.production.com "rm /tmp/lynis.log /tmp/lynis-report.dat"
