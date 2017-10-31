@@ -1,1 +1,5 @@
+
+https://packages.cisofy.com/
 git clone https://github.com/CISOfy/lynis
+
+ ./lynis audit system -Q
