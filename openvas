@@ -1,0 +1,43 @@
+OpenVAS（开放式漏洞评估系统）是一个客户端 / 服务器架构，它通常用来评估目标主机上的漏洞。OpenVAS 是 Nessus 项目的一个分支，他提供的产品是完全免费的。
+首先你可能需要安装 OpenVAS（不过建议首先更新软件源列表和本地软件）。
+
+root@kali:~# apt-get update && apt-get upgrade
+...
+root@kali:~# apt-get install openvas
+配置 OpenVAS
+
+root@kali:~# openvas-setup
+[i] This script synchronizes an NVT collection with the 'OpenVAS NVT Feed'.
+[i] The 'OpenVAS NVT Feed' is provided by 'The OpenVAS Project'.
+[i] Online information about this feed: 'http://www.openvas.org/openvas-nvt-feed.html'.
+[i] NVT dir: /var/lib/openvas/plugins
+OpenVAS community feed server - http://www.openvas.org/
+This service is hosted by Greenbone Networks - http://www.greenbone.net/
+...
+Write out database with 1 new entries
+Data Base Updated
+md   main:  DEBUG:5624:2017-02-16 11h15.25 CST:    sql_open: db open, max retry sleep time is 0
+Rebuilding NVT cache... done.
+User created with password '6b5ebfbd-44de-4cc2-************'.
+登录链接为：https://localhost:9392 ，如果你不知道为什么是这个d端口，你可以使用 netstat -antp 命令来查看目前监听的端口（不过建议先使用 netstat -antp 来查看端口，避免出现低级失误，不然万一官方改变了端口，你也却任使用原来的端口造成访问失败）。
+
+root@kali:~# netstat -antp
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 127.0.0.1:9390          0.0.0.0:*               LISTEN      5979/openvasmd      
+tcp        0      0 127.0.0.1:9391          0.0.0.0:*               LISTEN      5948/openvassd: Wai 
+tcp        0      0 127.0.0.1:80            0.0.0.0:*               LISTEN      5989/gsad           
+tcp        0      0 127.0.0.1:9392          0.0.0.0:*               LISTEN      5986/gsad           
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      2064/sshd           
+tcp6       0      0 :::22                   :::*                    LISTEN      2064/sshd  
+安装配置以及链接地址都知晓后，需要开启 OpenVAS 服务，仅需要输入 OpenVAS-start 即可
+
+root@kali:~# openvas-start
+Starting OpenVas Services
+root@kali:~# 
+接下来需要打开浏览器，输入链接地址，进入登录界面，用户名默认为 admin，默认密钥为配置 OpenVAS 时 openvas-setup 执行结束后提示的" User created with password ' 6b5ebfbd-44de-4cc2-************ ' "（单引号内为密钥内容，每个人的都不一样，具体密钥以你电脑上的显示为准）。登录界面如图 0x0 。
+
+作者：梧桐树下的小海
+链接：http://www.jianshu.com/p/7367da8868cd
+來源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
