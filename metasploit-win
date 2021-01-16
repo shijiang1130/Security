@@ -1,1 +1,7 @@
-The latest Windows installer is located here: https://windows.metasploit.com/metasploitframework-latest.msi, with the last 10 builds archived at https://windows.metasploit.com/. To install, simply download the .msi package, adjust your Antivirus as-needed to ignore c:\metasploit-framework, double-click and enjoy. The msfconsole command and all related tools will be added to the system %PATH% environment variable.
+The latest Windows installer is located here: 
+https://windows.metasploit.com/metasploitframework-latest.msi, with the last 10 builds archived at https://windows.metasploit.com/. 
+To install, simply download the .msi package, adjust your Antivirus as-needed to ignore c:\metasploit-framework, double-click and enjoy. 
+The msfconsole command and all related tools will be added to the system %PATH% environment variable.
+
+https://github.com/rapid7/metasploit-framework/wiki/Downloads-by-Version
+
