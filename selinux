@@ -1,1 +1,16 @@
-container_runtime_t
+test accessing:
+[root@local ~]# id 
+uid=0(root) gid=0(root) groups=0(root) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+[root@local ~]# runcon unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 /bin/bash
+
+validate error:
+ yum install setroubleshoot
+ sealert -a audit.log 
+
+selinux is disabled:
+[root@bogon httpd]# id
+uid=0(root) gid=0(root) groups=0(root)
+[root@bogon httpd]# id -Z
+id: --context (-Z) works only on an SELinux-enabled kernel
+
+
