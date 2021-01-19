@@ -1,0 +1,1 @@
+nmap --script=vulscan -sV 172.16.0.0/24 -p 22
