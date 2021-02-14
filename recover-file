@@ -1,0 +1,9 @@
+1. deleted a file which known the file fd
+   cat /proc/888888/fd/88
+   cat /proc/888888/fd/88 > /tmp/recoverfile
+   
+2. ext 
+   debugfs
+
+3. xfs
+   no found
