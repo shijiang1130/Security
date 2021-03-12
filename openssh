@@ -1,0 +1,3 @@
+apt-get changelog openssh-server|grep CVE
+
+rpm -q --changelog  openssh
