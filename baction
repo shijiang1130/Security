@@ -1,0 +1,23 @@
+#!/usr/bin/expect
+
+set ip [lindex $argv 0]
+puts $ip
+set timeout 20
+set user "admin"
+set password "r00t666"
+set host "192.168.1.254"
+
+spawn ssh $user@$host
+    expect "password:"
+    send -- "$password\r"
+    expect "> "
+    send -- "shun $ip\r"
+    expect "> "
+log_file /opt/network_log/baction.log
+    send -- "show shun sta\r"
+    expect "> "
+log_file
+send "exit\r"
+expect eof
+~
+~
