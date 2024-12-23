@@ -1,0 +1,85 @@
+package LogDetector;
+#!/usr/bin/perl
+use File::Slurp;
+use strict;
+use Data::Dumper;
+use Net::SMTP;
+
+
+sub new {
+        my ($class) = shift;
+        my $self = {
+                log => '/opt/network_log/192.168.1.254.log',
+                srcip => {},
+                email => '192.168.1.66',
+                emailbody => '/opt/network_log/baction.log'
+        };
+        bless $self,$class;
+        return $self;
+
+}
+
+sub mail {
+        my ($self) = shift;
+        my @records = read_file($self->{emailbody});
+        my $smtp = Net::SMTP->new("localhost");
+        $smtp->mail('alerts@lookdata.cn');
+        $smtp->to('linus@lookdata.cn');
+        $smtp->data();
+        $smtp->datasend("To: Linus\n");
+        $smtp->datasend("From: devops\n");
+        $smtp->datasend("Content-Type: text/html \n");
+        $smtp->datasend("Subject: WebVpn\n");
+        $smtp->datasend("Over <span style=\"color:red\"> 10</span> times attacked records: </br>");
+        $smtp->datasend(@records);
+        $smtp->dataend();
+        $smtp->quit;
+}
+
+sub etl {
+        my $self = shift;
+        my @lines = read_file($self->{log});
+        foreach (@lines) {
+                if (/FTD-6-716039|FTD-6-113005|FTD-6-113015/) {
+                        if ( /IP <(\d+.\d+.\d+.\d+)>/ ) {
+                                if($self->{srcip}{$1}) { $self->{srcip}{$1}++; } else {$self->{srcip}{$1} = 1; }
+                        }
+                        elsif ( /IP = (\d+.\d+.\d+.\d+)/ ) {
+                                if($self->{srcip}{$1}) { $self->{srcip}{$1}++; } else {$self->{srcip}{$1} = 1; }
+                        }
+                }
+        }
+        while( my ($k,$v) = each ($self->{srcip}) ) {
+                if( $v > 10 ) {
+                        print "ip: $k count: $v\n";
+                        print "prepare to start block\n";
+                        if ($k =~/^10.|^172./) { die; }
+                        $self->_block($k);
+                        print "done to $k\n";
+                }else{
+                }
+        }
+        return $self;
+
+}
+sub _block {
+        my ($self,$k) = @_;
+        my $ret = `/opt/network_log/baction $k`;
+        return;
+}
+
+sub clean {
+        my $self = shift;
+        unlink $self->{emailbody};
+}
+package main;
+my $runner = LogDetector->new();
+$runner->etl();
+$runner->mail();
+$runner->clean();
+
+
+1;
+
+
+
